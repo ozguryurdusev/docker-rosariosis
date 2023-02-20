@@ -1,4 +1,6 @@
 # https://riptutorial.com/docker-compose
+# sudo docker compose --file docker-compose.yml up -d
+# https://docs.docker.com/compose/reference/
 version: '3.1'
 
 services:
@@ -11,8 +13,10 @@ services:
       POSTGRES_DB: rosariosis
 
   web:
-    build: .
+    image: rosariosis/rosariosis:master
+    #build: .
     ports:
+      # host:container
       - "80:80"
     depends_on:
       - db
