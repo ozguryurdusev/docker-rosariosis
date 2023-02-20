@@ -19,17 +19,7 @@ docker build -t rosariosis .
 
 RosarioSIS uses a PostgreSQL database:
 ```bash
-docker run --name rosariosisdb -e "POSTGRES_PASSWORD=postgrespwd" -d postgres
-```
-
-Create database:
-```bash
-docker exec -it rosariosisdb bash
-psql -h localhost -p 5432 -U postgres
-postgres=# CREATE USER rosario WITH PASSWORD 'rosariopwd';
-postgres=# CREATE DATABASE rosariosis WITH ENCODING 'UTF8' OWNER rosario;
-postgres=# \q
-exit
+docker run --name rosariosisdb -e "POSTGRES_USER=rosario" -e "POSTGRES_PASSWORD=rosariopwd" -e "POSTGRES_DB=rosariosis" -d postgres
 ```
 
 Run RosarioSIS (DockerHub image) and link the PostgreSQL container:
