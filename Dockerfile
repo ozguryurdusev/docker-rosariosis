@@ -18,14 +18,14 @@ ENV DBTYPE=postgresql \
     ROSARIOSIS_LANG='en_US'
 
 # Upgrade packages.
-# Install git, Apache2 + PHP + PostgreSQL webserver, sendmail, wkhtmltopdf & others utilities.
+# Install git, Apache2 + PHP + PostgreSQL client, sendmail, wkhtmltopdf & others utilities.
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install postgresql-client wkhtmltopdf libpq-dev libpng-dev libxml2-dev libzip-dev libonig-dev sendmail nano locales  -y;
+    apt-get install postgresql-client wkhtmltopdf libpq-dev libjpeg-dev libpng-dev libxml2-dev libzip-dev libcurl4-gnutls-dev libonig-dev sendmail nano locales  -y;
 
 # Install PHP extensions.
-RUN docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
-    docker-php-ext-install -j$(nproc) gd mbstring xml pgsql gettext intl xmlrpc zip
+RUN docker-php-ext-configure gd --with-jpeg; \
+    docker-php-ext-install -j$(nproc) gd mbstring xml pgsql gettext intl xmlrpc zip curl
 
 # Download and extract rosariosis
 ENV ROSARIOSIS_VERSION 'v10.8'
