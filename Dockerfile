@@ -8,7 +8,8 @@ FROM php:7.4-apache
 
 LABEL maintainer="François Jacquet <francoisjacquet@users.noreply.github.com>"
 
-ENV PGHOST=db \
+ENV DBTYPE=postgresql \
+    PGHOST=db \
     PGUSER=rosario \
     PGPASSWORD=rosariopwd \
     PGDATABASE=rosariosis \

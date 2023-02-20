@@ -8,23 +8,25 @@
  */
 
 /**
- * PostgreSQL Database Settings
+ * Database Settings
  *
  * You can get this info from your web host
  */
 
-// Database server hostname: use localhost if on same server.
+// Database type: postgresql or mysql.
+$DatabaseType = getenv( 'DBTYPE' );
 
+// Database server hostname: use localhost if on same server.
 $DatabaseServer = getenv( 'PGHOST' );
 
 // Database username.
 $DatabaseUsername = getenv( 'PGUSER' );
 
 // Database password.
-$DatabasePassword = getenv( 'PGPASSWORD' );;
+$DatabasePassword = getenv( 'PGPASSWORD' );
 
 // Database name.
-$DatabaseName = getenv( 'PGDATABASE' );;
+$DatabaseName = getenv( 'PGDATABASE' );
 
 // Database port: default is 5432.
 $DatabasePort = getenv( 'PGPORT' );
@@ -35,12 +37,17 @@ $DatabasePort = getenv( 'PGPORT' );
  */
 
 /**
- * Full path to the PostrgeSQL database dump utility for this server
+ * Full path to the database dump utility for this server
  *
+ * pg_dump for PostgreSQL
  * @example /usr/bin/pg_dump
  * @example C:/Progra~1/PostgreSQL/bin/pg_dump.exe
+ *
+ * mysqldump for MySQL
+ * @example /usr/bin/mysqldump
+ * @example C:/wamp/bin/mysql/mysql[version]/mysqldump.exe
  */
-$pg_dumpPath = '/usr/bin/pg_dump';
+$DatabaseDumpPath = getenv( 'DBTYPE' ) === 'mysql' ? '/usr/bin/mysqldump' : '/usr/bin/pg_dump';
 
 /**
  * Full path to wkhtmltopdf binary file

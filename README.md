@@ -47,6 +47,10 @@ Note 2: you may have to add `sudo` before the `docker` command.
 
 The RosarioSIS image uses several environment variables which are easy to miss. While none of the variables are required, they may significantly aid you in using the image.
 
+### DBTYPE
+
+Database type: postgresql or mysql (defaults to postgresql).
+
 ### PGHOST
 
 Host of the postgres database.
