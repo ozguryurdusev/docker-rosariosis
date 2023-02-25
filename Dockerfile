@@ -32,8 +32,7 @@ ENV ROSARIOSIS_VERSION 'v10.8.4'
 
 RUN mkdir /usr/src/rosariosis && \
     curl -L https://gitlab.com/francoisjacquet/rosariosis/-/archive/${ROSARIOSIS_VERSION}/rosariosis-${ROSARIOSIS_VERSION}.tar.gz \
-    | tar xz --strip-components=1 -C /usr/src/rosariosis && \
-    rm rosariosis-${ROSARIOSIS_VERSION}.tar.gz
+    | tar xz --strip-components=1 -C /usr/src/rosariosis
 
 # Copy our configuration files.
 COPY conf/config.inc.php /usr/src/rosariosis/config.inc.php
