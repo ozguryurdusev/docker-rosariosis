@@ -28,13 +28,12 @@ RUN docker-php-ext-configure gd --with-jpeg; \
     docker-php-ext-install -j$(nproc) gd mbstring xml pgsql gettext intl xmlrpc zip curl
 
 # Download and extract rosariosis
-ENV ROSARIOSIS_VERSION 'v10.8.3'
+ENV ROSARIOSIS_VERSION 'v10.8.4'
+
 RUN mkdir /usr/src/rosariosis && \
     curl -L https://gitlab.com/francoisjacquet/rosariosis/-/archive/${ROSARIOSIS_VERSION}/rosariosis-${ROSARIOSIS_VERSION}.tar.gz \
     | tar xz --strip-components=1 -C /usr/src/rosariosis && \
-    rm -rf /var/www/html && mkdir -p /var/www && \
-    ln -s /usr/src/rosariosis/ /var/www/html && chmod 777 /var/www/html &&\
-    chown -R www-data:www-data /usr/src/rosariosis
+    rm rosariosis-${ROSARIOSIS_VERSION}.tar.gz
 
 # Copy our configuration files.
 COPY conf/config.inc.php /usr/src/rosariosis/config.inc.php

@@ -17,7 +17,7 @@ docker build -t rosariosis .
 
 ## Usage
 
-RosarioSIS uses a PostgreSQL database:
+RosarioSIS uses a [PostgreSQL database](https://hub.docker.com/_/postgres/):
 ```bash
 docker run --name rosariosisdb -e "POSTGRES_USER=rosario" -e "POSTGRES_PASSWORD=rosariopwd" -e "POSTGRES_DB=rosariosis" -d postgres
 ```
@@ -27,9 +27,14 @@ Run RosarioSIS (DockerHub image) and link the PostgreSQL container:
 docker run -e "ROSARIOSIS_ADMIN_EMAIL=admin@example.com" -e "PGHOST=rosariosisdb" -h `hostname -f` -d -p 80:80 --name rosariosis --link rosariosisdb:rosariosisdb rosariosis/rosariosis:master
 ```
 
+RosarioSIS files are stored in the `/var/www/html` folder inside the container. To persist RosarioSIS data on your host, you can create a [volume](https://docs.docker.com/storage/volumes/), adding for example to the above command:
+```bash
+-v ./plan/rosariosis:/var/www/html
+```
+
 Port 80 will be exposed, so you can visit http://localhost/InstallDatabase.php to get started. Default username and password: `admin`.
 
-Note: a `docker-compose.yml` file is available.
+Note: a [`docker-compose.yml`](docker-compose.yml) file is available.
 
 Note 2: you may have to add `sudo` before the `docker` command.
 

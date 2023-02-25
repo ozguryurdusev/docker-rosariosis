@@ -7,6 +7,9 @@ services:
 
   db:
     image: postgres
+    volumes:
+      # Will persist container's /var/lib/postgresql/data folder to host's ./plan/db/ folder
+      - "./plan/db:/var/lib/postgresql/data"
     environment:
       POSTGRES_USER: rosario
       POSTGRES_PASSWORD: rosariopwd
@@ -20,6 +23,9 @@ services:
       - "80:80"
     depends_on:
       - db
+    volumes:
+      # Will persist container's /var/www/html folder to host's ./plan/rosariosis/ folder
+      - "./plan/rosariosis:/var/www/html"
     environment:
       PGHOST: db
       PGUSER: rosario
