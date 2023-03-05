@@ -1,8 +1,7 @@
-# https://riptutorial.com/docker-compose
+# https://docs.docker.com/compose/reference/
 # sudo docker compose --file docker-compose.yml up -d
 # Update to the latest image:
 # sudo docker compose pull && sudo docker compose up -d
-# https://docs.docker.com/compose/reference/
 version: '3.1'
 
 services:

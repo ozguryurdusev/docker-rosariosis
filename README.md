@@ -17,20 +17,40 @@ docker build -t rosariosis .
 
 ## Usage
 
-RosarioSIS uses a [PostgreSQL database](https://hub.docker.com/_/postgres/):
+RosarioSIS uses a PostgreSQL database:
 ```bash
-docker run --name rosariosisdb -e "POSTGRES_USER=rosario" -e "POSTGRES_PASSWORD=rosariopwd" -e "POSTGRES_DB=rosariosis" -d postgres
+docker run -d \
+	--name rosariosisdb \
+	-e "POSTGRES_USER=rosario" \
+	-e "POSTGRES_PASSWORD=rosariopwd" \
+	-e "POSTGRES_DB=rosariosis" \
+	-v ./plan/db:/var/lib/postgresql/data \
+	postgres
 ```
+This command will
+1. [run](https://docs.docker.com/engine/reference/commandline/run/) the latest [postgres](https://hub.docker.com/_/postgres/) image
+2. name it "rosariosisdb"
+3. set database name "rosariosis", user "rosario" and password "rosariopwd"
+4. a [volume](https://docs.docker.com/storage/volumes/) will persist data on your host inside `./plan/db`
 
 Run RosarioSIS (DockerHub image) and link the PostgreSQL container:
 ```bash
-docker run -e "ROSARIOSIS_ADMIN_EMAIL=admin@example.com" -e "PGHOST=rosariosisdb" -h `hostname -f` -d -p 80:80 --name rosariosis --link rosariosisdb:rosariosisdb rosariosis/rosariosis:master
+docker run -d \
+	--name rosariosis \
+	-e "ROSARIOSIS_ADMIN_EMAIL=admin@example.com" \
+	-e "PGHOST=rosariosisdb" \
+	--link rosariosisdb:rosariosisdb \
+	-p 80:80 \
+	-v ./plan/rosariosis:/var/www/html \
+	rosariosis/rosariosis:master
 ```
-
-RosarioSIS files are stored in the `/var/www/html` folder inside the container. To persist RosarioSIS data on your host, you can create a [volume](https://docs.docker.com/storage/volumes/), adding for example to the above command:
-```bash
--v ./plan/rosariosis:/var/www/html
-```
+This command will
+1. [run](https://docs.docker.com/engine/reference/commandline/run/) the latest [rosariosis/rosariosis:master](https://hub.docker.com/r/rosariosis/rosariosis) image
+2. name it "rosariosis"
+3. set the notification email to "admin@example.com" (see available environment variables below)
+4. link the "rosariosisdb" container
+5. expose port 80 of container to port 80 on host (`host:container`)
+5. a [volume](https://docs.docker.com/storage/volumes/) will persist data on your host inside `./plan/rosariosis`
 
 Port 80 will be exposed, so you can visit http://localhost/InstallDatabase.php to get started. Default username and password: `admin`.
 
@@ -48,7 +68,7 @@ Database type: postgresql or mysql (defaults to postgresql).
 
 ### PGHOST
 
-Host of the postgres database.
+Host of the database.
 
 ### PGUSER
 
