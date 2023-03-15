@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Copying RosarioSIS to /var/www/html/"
-cp -r /usr/src/rosariosis/* /var/www/html/
+cp -r /usr/src/rosariosis/. /var/www/html/
 chown -R www-data:www-data /var/www/html
 
 echo "Configuring locale"
