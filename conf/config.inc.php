@@ -60,7 +60,7 @@ $DatabaseDumpPath = getenv( 'DBTYPE' ) === 'mysql' ? '/usr/bin/mysqldump' : '/us
  * @example /usr/local/bin/wkhtmltopdf
  * @example C:/Progra~1/wkhtmltopdf/bin/wkhtmltopdf.exe
  */
-$wkhtmltopdfPath = '/usr/bin/wkhtmltopdf';
+$wkhtmltopdfPath = '/usr/local/bin/wkhtmltopdf';
 
 
 /**
@@ -95,3 +95,9 @@ $RosarioErrorsAddress = getenv( 'ROSARIOSIS_ADMIN_EMAIL' );
  * @example array( 'en_US.utf8', 'fr_FR.utf8', 'es_ES.utf8' );
  */
 $RosarioLocales = array( getenv( 'ROSARIOSIS_LANG' ).'.utf8' );
+
+
+// Recommended PHP configuration settings
+ini_set( 'max_execution_time', 240 );
+ini_set( 'max_input_vars', 4000 );
+ini_set( 'session.gc_maxlifetime', 3600 ); // Session timeout: 1 hour.

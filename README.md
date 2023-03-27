@@ -58,6 +58,11 @@ Note: a [`docker-compose.yml`](docker-compose.yml) file is available.
 
 Note 2: you may have to add `sudo` before the `docker` command.
 
+Note 3: since image for RosarioSIS version 10.9, wkhtmltopdf is installed in another location, please update your `config.inc.php` file:
+```php
+$wkhtmltopdfPath = '/usr/local/bin/wkhtmltopdf';
+```
+
 ## Environment Variables
 
 The RosarioSIS image uses several environment variables which are easy to miss. While none of the variables are required, they may significantly aid you in using the image.

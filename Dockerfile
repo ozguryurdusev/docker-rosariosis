@@ -1,10 +1,10 @@
 # Dockerfile for RosarioSIS
 # https://www.rosariosis.org/
-# Best Dockerfile practices: http://crosbymichael.com/dockerfile-best-practices.html
+# Best Dockerfile practices: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
 # https://hub.docker.com/_/php?tab=tags&page=1&name=apache
-# TODO When moving to PHP8.0, remove xmlrpc extension!
-FROM php:7.4-apache
+# TODO When moving to PHP8.0, remove xmlrpc extension & libxml2-dev!
+FROM php:7.4-apache-bullseye
 
 LABEL maintainer="François Jacquet <francoisjacquet@users.noreply.github.com>"
 
@@ -17,18 +17,61 @@ ENV DBTYPE=postgresql \
     ROSARIOSIS_YEAR=2022 \
     ROSARIOSIS_LANG='en_US'
 
-# Upgrade packages.
-# Install git, Apache2 + PHP + PostgreSQL client, sendmail, wkhtmltopdf & others utilities.
+# Install postgresql-client, sendmail, nano editor, locales
 RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install postgresql-client wkhtmltopdf libpq-dev libjpeg-dev libpng-dev libxml2-dev libzip-dev libcurl4-gnutls-dev libonig-dev sendmail nano locales  -y;
+    apt-get install -y --no-install-recommends \
+        postgresql-client sendmail nano locales;
 
-# Install PHP extensions.
-RUN docker-php-ext-configure gd --with-jpeg; \
-    docker-php-ext-install -j$(nproc) gd mbstring xml pgsql gettext intl xmlrpc zip curl
+# Download and install wkhtmltopdf (avoid direct installation via apt, saves 115M :)
+RUN curl -L https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb \
+        --output wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
+    apt-get install -y --no-install-recommends ./wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
+    rm wkhtmltox_0.12.6.1-2.bullseye_amd64.deb;
+
+# Install PHP extensions build dependencies
+# Note: $savedAptMark var must be assigned & used in the same RUN command.
+RUN savedAptMark="$(apt-mark showmanual)"; \
+    apt-get install -y --no-install-recommends \
+        libicu-dev libpq-dev libjpeg-dev libpng-dev libldap2-dev libxml2-dev libzip-dev libonig-dev; \
+    \
+    # Install PHP extensions (curl, mbstring & xml are already included).
+    docker-php-ext-configure gd --with-jpeg; \
+    debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
+    docker-php-ext-configure ldap --with-libdir="lib/$debMultiarch"; \
+    docker-php-ext-install -j$(nproc) gd pgsql gettext intl xmlrpc zip ldap; \
+    \
+    # Reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
+    extDir="$(php -r 'echo ini_get("extension_dir");')"; \
+    apt-mark auto '.*' > /dev/null; \
+    apt-mark manual $savedAptMark; \
+    # Remove compilers & dev libraries
+    apt-mark auto autoconf dpkg-dev g++ gcc libc6-dev make; \
+    ldd "$extDir"/*.so \
+        | awk '/=>/ { print $3 }' \
+        | sort -u \
+        | xargs -r dpkg-query -S \
+        | cut -d: -f1 \
+        | sort -u \
+        | xargs -rt apt-mark manual; \
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+    rm -rf /var/lib/apt/lists/*;
+
+# Set recommended PHP error logging
+RUN { \
+    # https://www.php.net/manual/en/errorfunc.constants.php
+        echo 'error_reporting = E_ERROR | E_WARNING | E_PARSE | E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_COMPILE_WARNING | E_RECOVERABLE_ERROR'; \
+        echo 'display_errors = Off'; \
+        echo 'display_startup_errors = Off'; \
+        echo 'log_errors = On'; \
+        echo 'error_log = /dev/stderr'; \
+        echo 'log_errors_max_len = 1024'; \
+        echo 'ignore_repeated_errors = On'; \
+        echo 'ignore_repeated_source = Off'; \
+        echo 'html_errors = Off'; \
+    } > /usr/local/etc/php/conf.d/error-logging.ini
 
 # Download and extract rosariosis
-ENV ROSARIOSIS_VERSION 'v10.8.5'
+ENV ROSARIOSIS_VERSION 'v10.9'
 
 RUN mkdir /usr/src/rosariosis && \
     curl -L https://gitlab.com/francoisjacquet/rosariosis/-/archive/${ROSARIOSIS_VERSION}/rosariosis-${ROSARIOSIS_VERSION}.tar.gz \
@@ -36,7 +79,6 @@ RUN mkdir /usr/src/rosariosis && \
 
 # Copy our configuration files.
 COPY conf/config.inc.php /usr/src/rosariosis/config.inc.php
-COPY conf/.htaccess /usr/src/rosariosis/.htaccess
 COPY bin/init /init
 
 EXPOSE 80
