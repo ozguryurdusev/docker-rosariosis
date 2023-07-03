@@ -97,7 +97,12 @@ $RosarioErrorsAddress = getenv( 'ROSARIOSIS_ADMIN_EMAIL' );
 $RosarioLocales = array( getenv( 'ROSARIOSIS_LANG' ).'.utf8' );
 
 
-// Recommended PHP configuration settings
-ini_set( 'max_execution_time', 240 );
-ini_set( 'max_input_vars', 4000 );
-ini_set( 'session.gc_maxlifetime', 3600 ); // Session timeout: 1 hour.
+/**
+ * Recommended PHP configuration settings:
+ * Uncomment and edit values as needed
+ *
+ * @link https://www.php.net/manual/en/ini.list.php
+ */
+// ini_set( 'max_execution_time', 240 );
+// ini_set( 'memory_limit', '512M' ); // Maximum memory (RAM) allocated to RosarioSIS
+// ini_set( 'session.gc_maxlifetime', 3600 ); // Session timeout: 1 hour.
