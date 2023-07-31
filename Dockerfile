@@ -80,7 +80,7 @@ RUN { \
 } > /usr/local/etc/php/conf.d/error-logging.ini
 
 # Download and extract rosariosis
-ENV ROSARIOSIS_VERSION 'v11.0.2'
+ENV ROSARIOSIS_VERSION 'v11.1'
 
 RUN mkdir /usr/src/rosariosis && \
     curl -L https://gitlab.com/francoisjacquet/rosariosis/-/archive/${ROSARIOSIS_VERSION}/rosariosis-${ROSARIOSIS_VERSION}.tar.gz \
