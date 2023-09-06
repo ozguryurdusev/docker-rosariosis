@@ -95,6 +95,8 @@ This optional environment variable can be used to define a different port for th
 
 This optional environment variable can be used to define the default school year in RosarioSIS settings.
 
+Only change after Rollover.
+
 ### ROSARIOSIS_ADMIN_EMAIL
 
 This optional environment variable can be used to define an email address where to send error and new administrator notifications.
