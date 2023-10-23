@@ -22,6 +22,13 @@ services:
     ports:
       # host:container
       - "80:80"
+    # Warning: if you use a different port (ie. 8080) for host & access from http://localhost:8080
+    # wkhtmltopdf will fail with network error: ConnectionRefusedError
+    # To fix that, you can use this hack
+    # https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-how-do-i-connect-to-the-localhost-of-the-mach#answer-38753971
+    #extra_hosts:
+      # Then, access from http://rosariosisdocker.local:8080
+      # - "rosariosisdocker.local:$DOCKERHOST"
     depends_on:
       - db
     volumes:
