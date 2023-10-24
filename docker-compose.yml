@@ -27,6 +27,7 @@ services:
     # To fix that, you can use this hack
     # https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-how-do-i-connect-to-the-localhost-of-the-mach#answer-38753971
     #extra_hosts:
+      # Add `127.0.0.1 rosariosisdocker.local` to your /etc/hosts file
       # Then, access from http://rosariosisdocker.local:8080
       # - "rosariosisdocker.local:$DOCKERHOST"
     depends_on:
