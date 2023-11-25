@@ -25,10 +25,10 @@ docker run -d \
 	-e "POSTGRES_PASSWORD=rosariopwd" \
 	-e "POSTGRES_DB=rosariosis" \
 	-v ./plan/db:/var/lib/postgresql/data \
-	postgres:15
+	postgres:13
 ```
 This command will
-1. [run](https://docs.docker.com/engine/reference/commandline/run/) the [postgres](https://hub.docker.com/_/postgres/) image (version 15)
+1. [run](https://docs.docker.com/engine/reference/commandline/run/) the [postgres](https://hub.docker.com/_/postgres/) image (version 13)
 2. name it "rosariosisdb"
 3. set database name "rosariosis", user "rosario" and password "rosariopwd"
 4. a [volume](https://docs.docker.com/storage/volumes/) will persist data on your host inside `./plan/db`
