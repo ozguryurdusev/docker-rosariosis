@@ -40,5 +40,5 @@ services:
       PGUSER: rosario
       PGPASSWORD: rosariopwd
       PGDATABASE: rosariosis
-      ROSARIOSIS_YEAR: 2023
+      ROSARIOSIS_YEAR: 2024
 #      ROSARIOSIS_LANG: 'es_ES'
