@@ -38,7 +38,7 @@ RUN savedAptMark="$(apt-mark showmanual)"; \
     docker-php-ext-configure gd --with-jpeg; \
     debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
     docker-php-ext-configure ldap --with-libdir="lib/$debMultiarch"; \
-    docker-php-ext-install -j$(nproc) gd pgsql gettext intl xmlrpc zip ldap; \
+    docker-php-ext-install -j$(nproc) gd pgsql pdo_pgsql gettext intl xmlrpc zip ldap; \
     \
     # Reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
     extDir="$(php -r 'echo ini_get("extension_dir");')"; \
