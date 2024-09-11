@@ -79,6 +79,9 @@ RUN { \
     echo 'html_errors = Off'; \
 } > /usr/local/etc/php/conf.d/error-logging.ini
 
+# Use php.ini-production
+COPY /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+
 # Download and extract rosariosis
 ENV ROSARIOSIS_VERSION 'v11.8.3'
 
