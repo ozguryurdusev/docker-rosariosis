@@ -80,7 +80,7 @@ RUN { \
 } > /usr/local/etc/php/conf.d/error-logging.ini
 
 # Use php.ini-production
-COPY /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 
 # Download and extract rosariosis
 ENV ROSARIOSIS_VERSION 'v11.8.3'
