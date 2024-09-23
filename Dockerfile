@@ -83,7 +83,7 @@ RUN { \
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 
 # Download and extract rosariosis
-ENV ROSARIOSIS_VERSION 'v11.8.4'
+ENV ROSARIOSIS_VERSION 'v11.8.5'
 
 RUN mkdir /usr/src/rosariosis && \
     curl -L https://gitlab.com/francoisjacquet/rosariosis/-/archive/${ROSARIOSIS_VERSION}/rosariosis-${ROSARIOSIS_VERSION}.tar.gz \
