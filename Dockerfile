@@ -2,9 +2,9 @@
 # https://www.rosariosis.org/
 # Best Dockerfile practices: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
-# https://hub.docker.com/_/php?tab=tags&page=1&name=apache
-# TODO When moving to PHP8.0, remove xmlrpc extension & libxml2-dev!
-FROM php:7.4-apache-bullseye
+# https://hub.docker.com/_/php/tags?name=apache
+# TODO test!!
+FROM php:8.1-apache-bookworm
 
 LABEL maintainer="François Jacquet <francoisjacquet@users.noreply.github.com>"
 
@@ -32,13 +32,13 @@ RUN curl -L https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-
 # Note: $savedAptMark var must be assigned & used in the same RUN command.
 RUN savedAptMark="$(apt-mark showmanual)"; \
     apt-get install -y --no-install-recommends \
-        libicu-dev libpq-dev libjpeg-dev libpng-dev libldap2-dev libxml2-dev libzip-dev libonig-dev; \
+        libicu-dev libpq-dev libjpeg-dev libpng-dev libldap2-dev libzip-dev libonig-dev; \
     \
     # Install PHP extensions (curl, mbstring & xml are already included).
     docker-php-ext-configure gd --with-jpeg; \
     debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
     docker-php-ext-configure ldap --with-libdir="lib/$debMultiarch"; \
-    docker-php-ext-install -j$(nproc) gd pgsql pdo_pgsql gettext intl xmlrpc zip ldap; \
+    docker-php-ext-install -j$(nproc) gd pgsql pdo_pgsql gettext intl zip ldap; \
     \
     # Reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
     extDir="$(php -r 'echo ini_get("extension_dir");')"; \
@@ -82,8 +82,11 @@ RUN { \
 # Use php.ini-production
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 
+# Enable Apache mod_rewrite for .htaccess
+RUN a2enmod rewrite
+
 # Download and extract rosariosis
-ENV ROSARIOSIS_VERSION 'v12.1'
+ENV ROSARIOSIS_VERSION 'v12.1.1'
 
 RUN mkdir /usr/src/rosariosis && \
     curl -L https://gitlab.com/francoisjacquet/rosariosis/-/archive/${ROSARIOSIS_VERSION}/rosariosis-${ROSARIOSIS_VERSION}.tar.gz \
