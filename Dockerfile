@@ -22,10 +22,10 @@ RUN apt-get update && \
         postgresql-client sendmail nano locales;
 
 # Download and install wkhtmltopdf (avoid direct installation via apt, saves 115M :)
-RUN curl -L https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb \
-        --output wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
-    apt-get install -y --no-install-recommends ./wkhtmltox_0.12.6.1-2.bullseye_amd64.deb; \
-    rm wkhtmltox_0.12.6.1-2.bullseye_amd64.deb;
+RUN curl -L https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb \
+        --output wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
+    apt-get install -y --no-install-recommends ./wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
+    rm wkhtmltox_0.12.6.1-3.bookworm_amd64.deb;
 
 # Install PHP extensions build dependencies
 # Note: $savedAptMark var must be assigned & used in the same RUN command.
