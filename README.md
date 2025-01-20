@@ -15,6 +15,8 @@ cd docker-rosariosis
 docker build -t rosariosis .
 ```
 
+Note: a [`docker-compose.yml`](docker-compose.yml) file is also available.
+
 ## Usage
 
 RosarioSIS uses a PostgreSQL database:
@@ -25,10 +27,10 @@ docker run -d \
 	-e "POSTGRES_PASSWORD=rosariopwd" \
 	-e "POSTGRES_DB=rosariosis" \
 	-v ./plan/db:/var/lib/postgresql/data \
-	postgres:13
+	postgres:15
 ```
 This command will
-1. [run](https://docs.docker.com/engine/reference/commandline/run/) the [postgres](https://hub.docker.com/_/postgres/) image (version 13)
+1. [run](https://docs.docker.com/engine/reference/commandline/run/) the [postgres](https://hub.docker.com/_/postgres/) image (version 15)
 2. name it "rosariosisdb"
 3. set database name "rosariosis", user "rosario" and password "rosariopwd"
 4. a [volume](https://docs.docker.com/storage/volumes/) will persist data on your host inside `./plan/db`
@@ -54,14 +56,9 @@ This command will
 
 Port 80 will be exposed, so you can visit http://localhost/InstallDatabase.php to get started. Default username and password: `admin`.
 
-Note: a [`docker-compose.yml`](docker-compose.yml) file is available.
+Note: you may have to add `sudo` before the `docker` command.
 
-Note 2: you may have to add `sudo` before the `docker` command.
-
-Note 3: since image for RosarioSIS version 10.9, wkhtmltopdf is installed in another location, please update your `config.inc.php` file:
-```php
-$wkhtmltopdfPath = '/usr/local/bin/wkhtmltopdf';
-```
+Warning: since image for RosarioSIS version 12.1.1, the image was **upgraded to Debian 12 bookworm, PHP 8.1 and should use PostgreSQL 15**. Database upgrade should be done manually.
 
 ## Environment Variables
 

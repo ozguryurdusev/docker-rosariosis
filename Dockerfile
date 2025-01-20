@@ -3,7 +3,6 @@
 # Best Dockerfile practices: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
 # https://hub.docker.com/_/php/tags?name=apache
-# TODO test!!
 FROM php:8.1-apache-bookworm
 
 LABEL maintainer="François Jacquet <francoisjacquet@users.noreply.github.com>"

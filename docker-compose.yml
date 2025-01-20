@@ -7,7 +7,7 @@ version: '3.1'
 services:
 
   db:
-    image: postgres:13
+    image: postgres:15
     volumes:
       # Will persist container's /var/lib/postgresql/data folder to host's ./plan/db/ folder
       - "./plan/db:/var/lib/postgresql/data"
