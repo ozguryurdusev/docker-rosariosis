@@ -1,6 +1,7 @@
 # Dockerfile for RosarioSIS
 # https://www.rosariosis.org/
 # Best Dockerfile practices: https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+# Lint Dockerfile: https://hadolint.github.io/hadolint/
 
 # https://hub.docker.com/_/php/tags?name=apache
 FROM php:8.1-apache-bookworm
@@ -26,6 +27,9 @@ RUN curl -L https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-
         --output wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
     apt-get install -y --no-install-recommends ./wkhtmltox_0.12.6.1-3.bookworm_amd64.deb; \
     rm wkhtmltox_0.12.6.1-3.bookworm_amd64.deb;
+
+# Set the SHELL option -o pipefail before RUN with a pipe in it
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Install PHP extensions build dependencies
 # Note: $savedAptMark var must be assigned & used in the same RUN command.
@@ -85,7 +89,10 @@ RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 RUN a2enmod rewrite
 
 # Download and extract rosariosis
-ENV ROSARIOSIS_VERSION 'v12.1.1'
+ENV ROSARIOSIS_VERSION 'v12.1.2'
+
+# Set the SHELL option -o pipefail before RUN with a pipe in it
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN mkdir /usr/src/rosariosis && \
     curl -L https://gitlab.com/francoisjacquet/rosariosis/-/archive/${ROSARIOSIS_VERSION}/rosariosis-${ROSARIOSIS_VERSION}.tar.gz \
