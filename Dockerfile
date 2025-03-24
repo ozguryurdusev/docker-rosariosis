@@ -35,10 +35,10 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Note: $savedAptMark var must be assigned & used in the same RUN command.
 RUN savedAptMark="$(apt-mark showmanual)"; \
     apt-get install -y --no-install-recommends \
-        libicu-dev libpq-dev libjpeg-dev libpng-dev libldap2-dev libzip-dev libonig-dev; \
+        libicu-dev libpq-dev libjpeg-dev libpng-dev libwebp-dev libldap2-dev libzip-dev libonig-dev; \
     \
     # Install PHP extensions (curl, mbstring & xml are already included).
-    docker-php-ext-configure gd --with-jpeg; \
+    docker-php-ext-configure gd --with-jpeg --with-webp; \
     debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
     docker-php-ext-configure ldap --with-libdir="lib/$debMultiarch"; \
     docker-php-ext-install -j$(nproc) gd pgsql pdo_pgsql gettext intl zip ldap; \
@@ -89,7 +89,7 @@ RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 RUN a2enmod rewrite
 
 # Download and extract rosariosis
-ENV ROSARIOSIS_VERSION 'v12.1.3'
+ENV ROSARIOSIS_VERSION 'v12.2'
 
 # Set the SHELL option -o pipefail before RUN with a pipe in it
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
